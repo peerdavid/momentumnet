@@ -1,4 +1,5 @@
 numpy>=1.15
-torch>=1.7
+#torch>=1.7
 matplotlib
 imageio
+torchvision==0.8.2

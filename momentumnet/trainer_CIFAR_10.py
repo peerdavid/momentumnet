@@ -8,6 +8,8 @@ import numpy as np
 import torchvision
 import torchvision.transforms as transforms
 import os
+import tqdm
+import time
 
 from .models import (
     ResNet101,
@@ -18,6 +20,7 @@ from .models import (
     ResNet34,
     mResNet152,
     ResNet152,
+    mResNetDavid,
 )
 
 n_workers = 10
@@ -95,6 +98,8 @@ def train_resnet(
         net = mResNet152
     if model == "resnet152":
         net = ResNet152
+    if model == "mResNetDavid":
+        net = mResNetDavid
     num_classes = 100 if cifar100 else 10
     if not is_momnet:
         net = net(num_classes=num_classes)
@@ -136,7 +141,8 @@ def train_resnet(
         train_loss = 0
         correct = 0
         total = 0
-        for batch_idx, (inputs, targets) in enumerate(trainloader):
+        start = time.time()
+        for batch_idx, (inputs, targets) in tqdm.tqdm(enumerate(trainloader)):
             inputs, targets = inputs.to(device), targets.to(device)
             optimizer.zero_grad()
             outputs = net(inputs)
@@ -150,6 +156,10 @@ def train_resnet(
         print(
             "Epoch %d: %.2e, %.2e"
             % (epoch, train_loss / (batch_idx + 1), 100.0 * correct / total)
+        )
+        print(
+            "Time %.2f"
+            % (time.time() - start)
         )
         return train_loss / (batch_idx + 1), 100.0 * correct / total
 

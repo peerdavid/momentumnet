@@ -653,3 +653,15 @@ def mResNet152(num_classes=1000, init_speed=0, gamma=0.9, mem=False):
         gamma=gamma,
         mem=mem,
     )
+
+
+def mResNetDavid(num_classes=1000, init_speed=0, gamma=0.9, mem=False):
+    return MResNet(
+        Bottleneck,
+        MBottleneck,
+        [6, 20, 60, 6],
+        num_classes=num_classes,
+        init_speed=init_speed,
+        gamma=gamma,
+        mem=mem,
+    )
